@@ -1,68 +1,84 @@
-# ⚡ 60 FPS Hardware-Accelerated WebGPU Chrome on Google Colab (Tesla T4)
+# 🚀 1-Click Hardware-Accelerated WebGPU Chrome on Google Colab (Tesla T4)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
-[![GitHub License](https://img.shields.io/github/license/hosein-ul/colab-webgpu-chrome)](LICENSE)
-
-An automated solution to run official **Google Chrome with full hardware-accelerated WebGPU on NVIDIA Tesla T4** inside a Google Colab Linux runtime, streamed at **60 FPS crystal-clear WebRTC with sub-30ms latency** via **Google Chrome Remote Desktop (CRD)**.
+اجرای مرورگر رسمی **Google Chrome با شتاب کامل سخت‌افزاری WebGPU** روی کارت گرافیک **NVIDIA Tesla T4** در محیط لینوکس ابری Google Colab برای پردازش‌های سنگین Web3، ماینینگ اثبات کار (Proof-of-Work Keccak-256) یونی‌کرد و برنامه‌های گرافیکی مدرن.
 
 ---
 
-## 🚀 Why Chrome Remote Desktop (CRD) instead of Legacy VNC?
+## 📖 راهنمای کامل فارسی (فهرست مطالب)
 
-Traditional VNC / noVNC setups rely on software frame polling (`x11vnc`), CPU tile compression, and TCP websockets which suffer from high latency (300–800ms) and sluggish input lag.
-
-By migrating to **Chrome Remote Desktop**:
-* **Sub-30ms Real-Time Latency:** Direct WebRTC streaming over Google's internal low-latency backbone.
-* **Stable 60 FPS Video:** Hardware-accelerated VP8/VP9 video encoding instead of choppy image tiles.
-* **Zero Input Lag:** Local client-side mouse pointer rendering feels like a native local machine.
-* **Adaptive Dynamic Resolution:** Automatically matches your client monitor dimensions and scale.
-* **Seamless Two-Way Clipboard:** Native copy/paste support for wallet addresses, passwords, and text.
+* [⚡ ویژگی‌های کلیدی و سرعت](#-ویژگیهای-کلیدی)
+* [🟢 روش اول: اجرای ۱۰۰٪ تک‌کلیک (پیشنهادی و بدون نیاز به اکانت)](#-روش-اول-اجرای-۱۰۰-تککلیک-پیشنهادی)
+* [⚡ روش دوم: ریموت دسکتاپ گوگل (۶۰ فریم ثابت WebRTC)](#-روش-دوم-ریموت-دسکتاپ-گوگل-۶۰-فریم-ثابت)
+* [🦊 اتصال کیف پول (OKX Wallet) و ماینینگ UniCred](#-اتصال-کیف-پول-okx-wallet-و-شروع-ماینینگ)
+* [🛠️ معماری فنی و رفع محدودیت‌های کانتینر کولب](#️-معماری-فنی-و-رفع-محدودیتهای-کولب)
 
 ---
 
-## ⚡ Quick Start Guide (Takes ~2 Minutes)
+## ⚡ ویژگی‌های کلیدی
 
-### 1. Open the Notebook
-Click the **[Open In Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)** badge.
-
-### 2. Verify GPU Runtime
-Ensure **T4 GPU** is selected:  
-`Runtime` ➔ `Change runtime type` ➔ `T4 GPU` ➔ `Save`.
-
-### 3. Step 1: Install Drivers & Remote Desktop (~45s)
-Click **Play** on the first cell:  
-`⚡ [1/2] پیکربندی سخت‌افزاری تسلا T4، درایورهای Vulkan و پکیج‌های ریموت دسکتاپ`
-
-### 4. Step 2: Authenticate & Connect
-1. In another browser tab, open [remotedesktop.google.com/headless](https://remotedesktop.google.com/headless).
-2. Click **Begin** ➔ **Next** ➔ **Authorize**.
-3. Copy the command for **Debian Linux** (starts with `DISPLAY= /opt/google/chrome-remote-desktop/start-host ...`).
-4. Paste it into the `AUTH_COMMAND` field of cell **[2]** in Colab, choose a 6-digit PIN (e.g. `123456`), and click **Play**.
-5. Open [remotedesktop.google.com/access](https://remotedesktop.google.com/access).
-6. Click on **colab-t4**, enter your PIN, and enjoy 60 FPS remote WebGPU Chrome!
+* **شتاب واقعی WebGPU:** بهره‌گیری مستقیم از چیپ گرافیکی Turing انویدیا (Tesla T4 با ۱۵ گیگابایت VRAM) بدون شبیه‌ساز نرم‌افزاری CPU.
+* **هش‌ریت ۶۴۰+ مگاهش:** ثبت بیش از ۶۴۰ مگاهش بر ثانیه در ماینینگ UniCred Fun روی شبکه یونی‌چین.
+* **اجرای فوق‌سریع و پایدار:** تنظیمات Low-Latency با تاخیر صفر در ارسال رخدادهای موس و کیبورد.
+* **کلیپ‌بورد دوطرفه:** کپی و پیست مستقیم آدرس کیف پول، پسورد و متون بین سیستم شخصی و کروم ریموت.
+* **بدون نیاز به پورت یا آی‌پی عمومی:** دسترسی فوری از طریق تونل رمزنگاری‌شده Cloudflare Quick Tunnel.
 
 ---
 
-## 🛠️ Architecture & Under-the-Hood Fixes
+## 🟢 روش اول: اجرای ۱۰۰٪ تک‌کلیک (پیشنهادی)
 
-Standard Google Colab containers restrict direct GPU rendering nodes and omit desktop Vulkan manifests by default. This script automatically:
+این روش برای کاربرانی طراحی شده که می‌خواهند با **کمترین کار ممکن و فقط با یک کلیک** به مرورگر متصل شوند:
 
-* **Kernel DRM Nodes:** Creates missing `/dev/dri/card0`, `/dev/dri/renderD128`, and `/dev/nvidia-modeset` device nodes with full non-root permissions.
-* **NVIDIA Vulkan ICD:** Generates `/etc/vulkan/icd.d/nvidia_icd.json` mapped to `libGLX_nvidia.so.0` and configures `ldconfig`.
-* **Hardware WebGPU Flags:** Launches Google Chrome Stable with `--use-angle=vulkan --use-vulkan=native --enable-unsafe-webgpu` and hardware rasterization.
-* **Native Desktop Shell:** Configures a dedicated non-root user (`colab`) on a lightweight `XFCE4` session with automatic Chrome WebGPU autostart.
-* **Fallback Web Mode:** Also includes a standalone in-browser noVNC + Cloudflare Quick Tunnel cell for testing without a Google account.
-
----
-
-## 📊 Verified Metrics
-
-* **GPU:** NVIDIA Tesla T4 (15,360 MiB VRAM)
-* **WebGPU Adapter:** `vendor: "nvidia"`, `architecture: "turing"`, `isFallbackAdapter: false`
-* **Mining Hashrate:** ~640+ MH/s on UniCred Proof-of-Work Keccak-256 WebGPU compute shaders.
-* **Remote Streaming Frame Rate:** 60 FPS WebRTC with dynamic bitrate adaptation.
+1. نوت‌بوک را در Google Colab باز کنید.
+2. از منوی بالا مطمئن شوید کارت گرافیک فعال است:  
+   `Runtime` ➔ `Change runtime type` ➔ `T4 GPU` ➔ `Save`.
+3. روی دکمه **Play (اجرا)** سلول اول با عنوان **`🟢 [روش ۱ - پیشنهادی] راه‌اندازی تک‌کلیک و فوق‌سریع مرورگر وب`** کلیک کنید.
+4. حدود ۴۰ ثانیه صبر کنید؛ یک دکمه بزرگ سبز رنگ با عنوان **«👉 ورود به مرورگر کروم ریموت»** ظاهر می‌شود.
+5. روی دکمه کلیک کنید تا مرورگر در تب جدید باز شود!
 
 ---
 
-## 📜 License
-MIT License
+## ⚡ روش دوم: ریموت دسکتاپ گوگل (۶۰ فریم ثابت WebRTC)
+
+اگر به دنبال بالاترین کیفیت تصویری ممکن (مثل کار با کامپیوتر محلی خود)، فریم‌ریت ثابت ۶۰ فریم و تاخیر زیر ۳۰ میلی‌ثانیه هستید:
+
+1. سلول **`🛠️ [گام اول روش ۲] نصب درایورها، XFCE4 و پکیج Chrome Remote Desktop`** را اجرا کنید (~۴۵ ثانیه).
+2. در مرورگر خود به صفحه رسمی [remotedesktop.google.com/headless](https://remotedesktop.google.com/headless) بروید.
+3. دکمه‌های **Begin** ➔ **Next** ➔ **Authorize** را بزنید.
+4. دستوری که برای سیستم لینوکس دبیان به شما نمایش می‌دهد (که با `DISPLAY= /opt/google/...` شروع می‌شود) را کپی کنید.
+5. دستور را در کادر `AUTH_COMMAND` سلول دوم پیست کنید، پین ۶ رقمی دلخواه (مثلاً `123456`) تعیین کرده و دکمه **Play** را بزنید.
+6. وارد [remotedesktop.google.com/access](https://remotedesktop.google.com/access) شوید، روی **`colab-t4`** کلیک کرده و پین را وارد کنید.
+
+---
+
+## 🦊 اتصال کیف پول (OKX Wallet) و شروع ماینینگ
+
+1. در داخل مرورگر کروم ریموت، صفحه UniCred به صورت خودکار باز می‌شود: `https://unicred.fun/#mine`.
+2. روی دکمه **Connect Wallet** کلیک کنید.
+3. در صورت نیاز به افزونه OKX Wallet، از وب‌استور کروم یا با لاگین امن افزونه را اضافه کنید.
+4. تراکنش‌های ماینینگ و استیکینگ NFT مستقیماً با سرعت بالای تسلا T4 و اینترنت پرسرعت دیتاسنتر گوگل پردازش می‌شوند.
+
+---
+
+## 🛠️ معماری فنی و رفع محدودیت‌های کولب
+
+محیط‌های کانتینری Google Colab به صورت پیش‌فرض دسترسی رندرینگ مستقیم به درایورهای گرافیکی لینوکس را محدود می‌کنند. این اسکریپت به صورت خودکار مراحل زیر را انجام می‌دهد:
+
+1. **ایجاد کرنل‌نودهای DRM:** ساخت فایل‌های دیوایس `/dev/dri/card0`، `/dev/dri/renderD128` و `/dev/nvidia-modeset` با دسترسی کامل کاربر.
+2. **پیکربندی Vulkan ICD:** نگاشت رسمی کتابخانه `libGLX_nvidia.so.0` در `/etc/vulkan/icd.d/nvidia_icd.json` و ثبت در `ldconfig`.
+3. **پرچم‌های بهینه‌سازی کروم:** اجرای Google Chrome Stable با فلگ‌های:  
+   `--use-angle=vulkan --use-vulkan=native --enable-unsafe-webgpu --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService --enable-gpu-rasterization --enable-zero-copy`
+4. **تنظیمات Low-Latency سرور تصویر:** غیرفعال‌سازی بافر اضافی RAM (`-ncache 0`) و انتقال بلادرنگ نشانگر موس برای حذف تاخیر ورودی.
+
+---
+
+## 📊 مشخصات سخت‌افزاری تایید شده
+
+* **کارت گرافیک:** NVIDIA Tesla T4 (معماری Turing، حافظه ۱۵,۳۶۰ مگابایت)
+* **آداپتور WebGPU در کروم:** `vendor: "nvidia"`, `architecture: "turing"`, `isFallbackAdapter: false`
+* **پروسه در nvidia-smi:** ثبت پروسه رسمی `C+G` (Compute + Graphics)
+* **هش‌ریت اثبات کار:** ۶۴۰ تا ۶۵۰ مگاهش بر ثانیه ثابت
+
+---
+
+## 📜 لایسنس
+این ریپازیتوری تحت لایسنس MIT منتشر شده است و به صورت اختصاصی (Private) برای شما پیکربندی گردیده است.
