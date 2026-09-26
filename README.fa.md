@@ -80,7 +80,7 @@
 در هر دو روش، مرورگر Google Chrome رسمی با دسترسی کامل به Chrome Web Store لود می‌شود:
 
 1. **نصب آسان هرگونه کیف پول:** به راحتی افزونه‌های OKX Wallet، MetaMask، Phantom یا Rabby را از کروم وب‌استور نصب کنید.
-2. **شتاب سخت‌افزاری کامل شیدرهای WebGPU:** تمام فلگ‌های شتاب‌دهنده گرافیکی از جمله `--enable-unsafe-webgpu` و `--use-vulkan=native` فعال هستند.
+2. **شتاب سخت‌افزاری کامل شیدرهای WebGPU:** تمام فلگ‌های شتاب‌دهنده گرافیکی از جمله `--enable-unsafe-webgpu` و `--use-angle=vulkan` فعال هستند.
 3. **بررسی سلامت و بنچمارک سخت‌افزار:** سلول سوم نوت‌بوک (**GPU Diagnostics**) را اجرا کنید تا وضعیت درایورها، درصد لود پردازشی GPU، حافظه VRAM و دمای کارت گرافیک تسلا T4 را رصد نمایید.
 
 ---
@@ -96,7 +96,7 @@
        ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
        ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
        └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
+                      --use-angle=vulkan --enable-unsafe-webgpu
 ```
 
 ---

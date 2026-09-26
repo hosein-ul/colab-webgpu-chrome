@@ -101,7 +101,7 @@ Colab Docker runtimes do not expose DRM device nodes to userland browsers. This 
        ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
        ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
        └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
+                      --use-angle=vulkan --enable-unsafe-webgpu
 ```
 
 ---
