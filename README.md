@@ -25,37 +25,37 @@ Google Colab provides access to enterprise **NVIDIA Tesla T4 GPUs (15,360 MiB VR
 
 This repository provides an automated, turn-key solution that:
 1. **Unlocks Native Hardware WebGPU:** Configures missing kernel DRM nodes (`/dev/dri/card0`, `/dev/dri/renderD128`, `/dev/nvidia-modeset`) and builds official NVIDIA Vulkan ICD manifests mapped to `libGLX_nvidia.so.0`.
-2. **Offers Two Remote Streaming Engines:**
-   * **Method 1 (1-Click Instant Stream):** In-browser low-latency noVNC streaming with zero configuration, zero accounts, and zero token copying.
-   * **Method 2 (60 FPS WebRTC):** Ultra-fast, crystal-clear Google Chrome Remote Desktop (CRD) with sub-30ms latency, native client cursor, and dynamic resolution scaling.
+2. **Offers Two Modern Remote Streaming Engines:**
+   * **Method 1 (Modern KasmVNC 1.5.0):** 100% 1-Click web-native streaming powered by **KasmVNC** with lossy **WebP compression**, client-side cursor rendering (zero mouse lag), and dynamic framerates up to 60 FPS — requiring zero accounts and zero manual code copying!
+   * **Method 2 (Google Chrome Remote Desktop):** Ultra-fast 60 FPS WebRTC streaming over Google's internal datacenter backbone with sub-30ms latency.
 
 ---
 
 ## ⚡ Comparison of Both Methods
 
-| Feature | Method 1: 1-Click Browser Stream | Method 2: Google Chrome Remote Desktop |
+| Feature | Method 1: Modern KasmVNC 1.5.0 | Method 2: Google Chrome Remote Desktop |
 | :--- | :---: | :---: |
 | **Setup Complexity** | **1-Click (Play button only)** | 1-Click with Google Auth code |
 | **Account Required?** | **None** | Google Account |
-| **Streaming Protocol** | WebSocket (noVNC / Cloudflare) | **WebRTC over Google Backbone** |
-| **Frame Rate** | 25–45 FPS (Adaptive) | **60 FPS Constant** |
-| **Latency** | 60–120ms (Tuned Low-Latency) | **Sub-30ms (Feels like local PC)** |
-| **Cursor Lag** | Local client cursor (`-cursor arrow`) | **Zero Input Lag (Client-rendered)** |
-| **Clipboard** | Bidirectional (`autocutsel`) | **Native OS Clipboard (`Ctrl+C / Ctrl+V`)** |
-| **Best For** | Instant testing, mobile, quick minting | High-framerate, extended sessions, precision |
+| **Compression Engine** | **Dynamic WebP (up to 80% lighter)** | **Hardware VP8/VP9 Video** |
+| **Frame Rate** | Up to 60 FPS (Adaptive) | **60 FPS Constant** |
+| **Latency** | 40–80ms (Ultra-Low) | **Sub-30ms (Feels like local PC)** |
+| **Cursor Response** | **Client-Side Rendered (0ms input lag)** | **Zero Input Lag (Client-rendered)** |
+| **Clipboard** | Bidirectional | **Native OS Clipboard (`Ctrl+C / Ctrl+V`)** |
+| **Best For** | Instant 1-click launch, mobile, laptops | Extended sessions, maximum framerate |
 
 ---
 
-## 🟢 Method 1: 1-Click Instant In-Browser Stream
+## 🟢 Method 1: 1-Click Modern KasmVNC Stream (WebP)
 
 Recommended when you want the fastest, zero-friction experience without visiting any other website:
 
 1. Click the **[Open In Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)** badge.
 2. In Colab, verify that GPU is enabled: `Runtime` ➔ `Change runtime type` ➔ **T4 GPU** ➔ `Save`.
 3. Click the **Play button** on the first cell:  
-   `🟢 [روش اول - پیشنهادی] راه‌اندازی ۱۰۰٪ تک‌کلیک مرورگر وب (1-Click Instant Stream)`.
-4. Wait ~45 seconds. A green button titled **"👉 ورود به مرورگر کروم ریموت"** will appear.
-5. Click it to open your remote WebGPU Chrome desktop directly inside a new browser tab!
+   `🟢 [روش اول] راه‌اندازی ۱۰۰٪ تک‌کلیک با موتور مدرن KasmVNC (WebP + Zero Mouse Lag)`.
+4. Wait ~45 seconds. A green button titled **"👉 ورود به مرورگر کروم ریموت (KasmVNC)"** will appear.
+5. Click it to open your modern WebP WebGPU desktop directly in your browser!
 
 ---
 
@@ -66,7 +66,7 @@ Recommended when you want the ultimate smoothness, zero latency, and 60 FPS perf
 1. Open **[remotedesktop.google.com/headless](https://remotedesktop.google.com/headless)** in a new tab.
 2. Click **Begin** ➔ **Next** ➔ **Authorize**, then copy the **Debian Linux** command (starts with `DISPLAY= /opt/google/chrome-remote-desktop/start-host ...`).
 3. In Colab, paste the command into `AUTH_COMMAND` in the second cell:  
-   `⚡ [روش دوم - پیشرفته ۶۰ فریم] راه‌اندازی با Google Chrome Remote Desktop (WebRTC)`.
+   `⚡ [روش دوم] راه‌اندازی با Google Chrome Remote Desktop (WebRTC ۶۰ فریم)`.
 4. Set your 6-digit PIN (default `123456`) and click **Play**.
 5. Once started, click the blue button or visit **[remotedesktop.google.com/access](https://remotedesktop.google.com/access)**.
 6. Click **colab-t4**, enter your PIN, and your 60 FPS WebGPU desktop is live!
