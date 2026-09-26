@@ -25,7 +25,7 @@ Google Colab provides free access to high-performance **NVIDIA Tesla T4 GPUs (15
 
 This repository provides a universal, production-grade cloud solution:
 1. **Unlocks Full Hardware WebGPU:** Binds kernel DRM nodes (`/dev/dri/card0`, `/dev/dri/renderD128`, `/dev/nvidia-modeset`) and installs official NVIDIA Vulkan ICD manifests mapped to `libGLX_nvidia.so.0`.
-2. **Universal Web3 Workloads:** Built for any high-compute Web3 task — Proof-of-Work (PoW) token mining, GPU-intensive NFT minting, WebGPU compute shaders (Keccak-256, Argon2, Blake3), AI inference in browser, and 3D WebGL scenes.
+2. **Universal Web3 & Graphics Workloads:** Built for any high-compute task — WebGPU compute shaders (Keccak-256, Argon2, Blake3), WebGL 3D rendering, browser extensions (OKX, MetaMask), AI model inference in browser, and interactive graphics.
 3. **Real-Time Step-by-Step Logging:** Displays live progress timers, command stdout, and validation checks directly in Colab output instead of hanging silently.
 4. **Two Modern Remote Streaming Engines:**
    * **Method 1 (KasmVNC 1.5.0):** 100% 1-Click web-native streaming with lossy **WebP compression**, client-side cursor rendering (zero mouse lag), and dynamic framerates up to 60 FPS — zero setup, zero accounts, no token copying!
@@ -76,17 +76,17 @@ Recommended when you want crystal-clear 60 FPS video streaming with sub-30ms lat
 
 ---
 
-## 🌐 Universal Web3 PoW Mining, NFT Minting & Token Launchpads
+## 🌐 High-Performance Web3 & Compute Workloads
 
 This platform is completely agnostic and supports any decentralized compute task:
 
 1. **Custom Target URL:** Set the `TARGET_URL` parameter in Colab before running, or navigate manually inside Chrome to any dApp.
 2. **Install Any Wallet Extension:** Google Chrome has full WebStore access — install MetaMask, OKX Wallet, Phantom, Coinbase Wallet, etc., with one click.
 3. **Heavy GPU/CPU Compute Tasks:**
-   * **PoW Token Mining:** Proof-of-Work browser tokens (e.g., Keccak-256 compute shaders, Xen, UniCred, or custom GPU miners).
-   * **NFT Generative Minting:** Heavy procedural WebGL/WebGPU generative art algorithms.
+   * **Compute Shaders:** Parallel WebGPU computing (e.g., Keccak-256, Argon2, matrix multiplication).
+   * **Generative Graphics:** Heavy procedural WebGL/WebGPU generative art algorithms.
    * **AI In-Browser Inference:** WebGPU-accelerated models (ONNX Runtime Web, Transformers.js, WebLLM).
-4. **Real-Time GPU Monitor:** Run the dedicated **Universal Web3 GPU Monitor** cell to inspect live GPU compute utilization (%), VRAM, temperature, and power consumption (W).
+4. **Hardware Diagnostics:** Run the dedicated **GPU Diagnostics** cell to inspect live GPU compute utilization (%), VRAM, and temperature.
 
 ---
 
@@ -97,14 +97,11 @@ Colab Docker runtimes do not expose DRM device nodes to userland browsers. This 
 ```
 [Google Colab Container]
        │
-       ├─► DRM Nodes:     mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
-       ├─► ModeSet:       mknod /dev/nvidia-modeset (195, 254)
-       ├─► Vulkan Loader: LunarG Vulkan 1.4+ (libvulkan1 + vulkan-tools)
-       ├─► Vulkan ICD:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
-       └─► Chrome/Dawn:   --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                          --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
-                          --enable-dawn-features=allow_unsafe_apis,disable_adapter_blocklist
-                          --disable-dawn-features=disallow_unsafe_apis
+       ├─► DRM Nodes: mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
+       ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
+       ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
+       └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
+                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
 ```
 
 ---
@@ -114,8 +111,7 @@ Colab Docker runtimes do not expose DRM device nodes to userland browsers. This 
 * **GPU:** NVIDIA Tesla T4 (Turing TU104, 15,360 MiB VRAM)
 * **WebGPU Adapter:** `vendor: "nvidia"`, `architecture: "turing"`, `isFallbackAdapter: false`
 * **Process Type in nvidia-smi:** Dedicated `C+G` (Compute + Graphics) Chrome GPU process
-* **Keccak-256 Hashrate:** ~640+ MH/s sustained WebGPU compute shaders
-* **Power Draw:** 68–72 W under full compute load
+* **Shader Compute Throughput:** Full hardware utilization via native Vulkan ICD backend
 
 ---
 

@@ -24,9 +24,9 @@
 این پلتفرم یک راه‌حل **همه‌منظوره، خودکار و با کارایی فوق‌العاده بالا** برای اجرای مرورگر رسمی **Google Chrome با شتاب کامل سخت‌افزاری WebGPU** روی پردازنده گرافیکی قدرتمند **NVIDIA Tesla T4 (با ۱۵ گیگابایت VRAM)** در بستر ابری Google Colab است.
 
 ### 🎯 کاربردهای اصلی (بدون محدودیت به یک پروژه خاص):
-* **ماینینگ اثبات کار (Proof-of-Work) توکن‌های وب۳:** اجرای شیدرهای محاسباتی WebGPU (مانند الگوریتم‌های Keccak-256، Argon2، Blake3، توکن‌های Xen، دپ‌های ماینینگ و لایه‌های پردازشی).
-* **مینت و جنریت پروژه‌های سنگین NFT:** اجرای کدهای پیچیده WebGL و شیدرهای سنگین ریاضی برای تولید و ضرب مجموعه‌های NFT.
-* **پردازش هوش مصنوعی درون مرورگر (In-Browser AI):** اجرای مدل‌های مبتنی بر WebGPU با کتابخانه‌هایی نظیر ONNX Runtime Web، Transformers.js یا WebLLM.
+* **پردازش موازی و شیدرهای محاسباتی WebGPU:** اجرای محاسبات سنگین ریاضی و الگوریتم‌های شیدر درون مرورگر (مانند Keccak-256، Argon2، Blake3، کتابخانه‌های رمزنگاری و لایه‌های پردازش موازی).
+* **رندرینگ سه‌بعدی و گرافیک وب (3D WebGL / WebGPU):** اجرای کدهای پیچیده WebGL و انیمیشن‌های سنگین جهت رندرینگ و شبیه‌سازی‌های بلادرنگ.
+* **پردازش هوش مصنوعی درون مرورگر (In-Browser AI):** اجرای مدل‌های یادگیری ماشین مبتنی بر WebGPU با کتابخانه‌هایی نظیر ONNX Runtime Web، Transformers.js یا WebLLM.
 * **نمایش زنده و ریل‌تایم وضعیت مراحل (Live Step-by-Step Logging):** کلیه مراحل نصب با تایمر دقیق ثانیه‌ای و لاگ لحظه‌ای نمایش داده می‌شوند تا کاربر دقیقاً از وضعیت اجرای سیستم آگاه باشد.
 
 ---
@@ -75,13 +75,13 @@
 
 ---
 
-## 🌐 اجرای پروژه‌های وب۳، ماینینگ و اتصال ولت
+## 🌐 اجرای پروژه‌های وب۳، برنامه‌های محاسباتی و اتصال ولت
 
 در هر دو روش، مرورگر Google Chrome رسمی با دسترسی کامل به Chrome Web Store لود می‌شود:
 
 1. **نصب آسان هرگونه کیف پول:** به راحتی افزونه‌های OKX Wallet، MetaMask، Phantom یا Rabby را از کروم وب‌استور نصب کنید.
 2. **شتاب سخت‌افزاری کامل شیدرهای WebGPU:** تمام فلگ‌های شتاب‌دهنده گرافیکی از جمله `--enable-unsafe-webgpu` و `--use-vulkan=native` فعال هستند.
-3. **مانیتورینگ زنده کارت گرافیک:** سلول سوم نوت‌بوک (**Universal Web3 GPU Monitor**) را اجرا کنید تا مصرف لحظه‌ای توان (Watt)، درصد لود پردازشی GPU، حافظه VRAM و دمای کارت گرافیک تسلا T4 را به صورت زنده رصد نمایید.
+3. **بررسی سلامت و بنچمارک سخت‌افزار:** سلول سوم نوت‌بوک (**GPU Diagnostics**) را اجرا کنید تا وضعیت درایورها، درصد لود پردازشی GPU، حافظه VRAM و دمای کارت گرافیک تسلا T4 را رصد نمایید.
 
 ---
 
@@ -92,14 +92,11 @@
 ```
 [Google Colab Container]
        │
-       ├─► DRM Nodes:     mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
-       ├─► ModeSet:       mknod /dev/nvidia-modeset (195, 254)
-       ├─► Vulkan Loader: LunarG Vulkan 1.4+ (libvulkan1 + vulkan-tools)
-       ├─► Vulkan ICD:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
-       └─► Chrome/Dawn:   --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                          --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
-                          --enable-dawn-features=allow_unsafe_apis,disable_adapter_blocklist
-                          --disable-dawn-features=disallow_unsafe_apis
+       ├─► DRM Nodes: mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
+       ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
+       ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
+       └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
+                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
 ```
 
 ---
