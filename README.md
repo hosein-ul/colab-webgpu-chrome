@@ -1,6 +1,6 @@
 # ⚡ Universal Hardware-Accelerated WebGPU Google Chrome on Google Colab (Tesla T4)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/rodigers/chrome-colab/blob/main/colab_chrome_webgpu.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![WebGPU](https://img.shields.io/badge/WebGPU-Hardware%20Accelerated-green.svg)]()
 [![NVIDIA T4](https://img.shields.io/badge/GPU-Tesla%20T4%20(15GB)-76B900.svg)]()
@@ -12,8 +12,8 @@
 
 ## 📌 Direct Links
 
-* **Open Notebook in Google Colab:** [Launch on Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
-* **GitHub Repository:** [hosein-ul/colab-webgpu-chrome](https://github.com/hosein-ul/colab-webgpu-chrome)
+* **Open Notebook in Google Colab:** [Launch on Colab](https://colab.research.google.com/github/rodigers/chrome-colab/blob/main/colab_chrome_webgpu.ipynb)
+* **GitHub Repository:** [rodigers/chrome-colab](https://github.com/rodigers/chrome-colab)
 * **Google Remote Desktop Setup (Method 2):** [remotedesktop.google.com/headless](https://remotedesktop.google.com/headless)
 * **Google Remote Desktop Access Panel:** [remotedesktop.google.com/access](https://remotedesktop.google.com/access)
 
@@ -52,7 +52,7 @@ This repository provides a universal, production-grade cloud solution:
 
 Recommended when you want the fastest, zero-friction launch without visiting external sites:
 
-1. Click the **[Open In Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)** badge.
+1. Click the **[Open In Colab](https://colab.research.google.com/github/rodigers/chrome-colab/blob/main/colab_chrome_webgpu.ipynb)** badge.
 2. In Colab, verify GPU runtime: `Runtime` ➔ `Change runtime type` ➔ **T4 GPU** ➔ `Save`.
 3. Set your desired `TARGET_URL` (or leave default `https://google.com`).
 4. Click the **Play button** on the first cell:  

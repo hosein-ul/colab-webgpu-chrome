@@ -1,0 +1,13 @@
+# ⚡ Universal Hardware-Accelerated WebGPU Chrome on Google Colab (Tesla T4)
+### پلتفرم ابری اجرای Google Chrome با شتاب کامل سخت‌افزاری WebGPU و Vulkan روی تسلا T4
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
+
+این پلتفرم به یک پروژه خاص محدود نیست؛ بلکه یک محیط کامل **Google Chrome ابری با شتاب سخت‌افزاری کارت گرافیک NVIDIA Tesla T4 (۱۵ گیگابایت VRAM)** است که می‌توانید هرگونه وب‌اپلیکیشن سنگین، شیدرهای محاسباتی WebGPU، بنچمارک‌های سه‌بعدی و افزونه‌های مرورگر (مانند ولت‌ها) را با شتاب سخت‌افزاری کامل اجرا نمایید.
+
+---
+### ⚡ انتخاب روش دسترسی:
+* **روش اول (موتور مدرن KasmVNC - ۱۰۰٪ تک‌کلیک و بدون اکانت):** استریم فوق‌العاده سبک با فشرده‌سازی داینامیک WebP، بدون کوچک‌ترین لگ در نشانگر موس (Client-side cursor) و بدون نیاز به کپی کردن هیچ کدی.
+* **روش دوم (Google Chrome Remote Desktop - استریم ویدئویی ۶۰ فریم):** برای کارهای فوق‌سنگین و طولانی با پروتکل WebRTC و تاخیر ناچیز زیر ۳۰ میلی‌ثانیه.
+
+> ⚠️ **نکته:** مطمئن شوید از منوی بالای صفحه گزینه **Runtime ➔ Change runtime type** روی **T4 GPU** تنظیم شده باشد.

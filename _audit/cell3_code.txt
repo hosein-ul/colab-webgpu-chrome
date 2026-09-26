@@ -1,0 +1,38 @@
+#@title 📊 مانیتورینگ زنده کارت گرافیک و توان پردازشی تسلا T4 (Universal Hardware GPU Monitor)
+#@markdown این سلول وضعیت زنده درصد لود پردازشی GPU، حافظه VRAM، دما و پروسه‌های فعال کارت گرافیک را نمایش می‌دهد:
+
+import time, subprocess, shutil
+from IPython.display import clear_output
+
+if not shutil.which("nvidia-smi"):
+    print("❌ خطا: کارت گرافیک شناسایی نشد!")
+    print("👈 لطفاً از منوی بالای کولب مسیر زیر را دنبال کرده و نوت‌بوک را روی T4 GPU قرار دهید:")
+    print("   Runtime ➔ Change runtime type ➔ T4 GPU ➔ Save")
+else:
+    print("🚀 مانیتورینگ زنده توان پردازشی تسلا T4 در حال اجراست (برای توقف، دکمه Stop سلول را بزنید)...")
+    try:
+        while True:
+            res = subprocess.run([
+                "nvidia-smi",
+                "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu",
+                "--format=csv,noheader,nounits"
+            ], capture_output=True, text=True)
+            
+            if res.returncode == 0 and res.stdout.strip():
+                parts = [p.strip() for p in res.stdout.strip().split(",")]
+                if len(parts) >= 6:
+                    name, gpu_util, mem_util, mem_used, mem_total, temp = parts[:6]
+                    status_str = "فعال (شتاب سخت‌افزاری کامل)"
+                    clear_output(wait=True)
+                    print("="*65)
+                    print(f"🚀 UNIVERSAL WEBGPU COMPUTE & GRAPHICS MONITOR — {name}")
+                    print("="*65)
+                    print(f"  ⚡ GPU Compute Utilization : {gpu_util}%")
+                    print(f"  🧠 VRAM Memory Used        : {mem_used} MiB / {mem_total} MiB ({mem_util}%)")
+                    print(f"  🌡️  GPU Temperature         : {temp} °C")
+                    status_str = "فعال (شتاب سخت‌افزاری کامل)"
+                    print("="*65)
+                    print("  💡 برای متوقف کردن مانیتور، دکمه Stop (■) سلول را بزنید.")
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("\nمانیتور با موفقیت متوقف شد.")
