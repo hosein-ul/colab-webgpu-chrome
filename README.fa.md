@@ -92,11 +92,14 @@
 ```
 [Google Colab Container]
        │
-       ├─► DRM Nodes: mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
-       ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
-       ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
-       └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
+       ├─► DRM Nodes:     mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
+       ├─► ModeSet:       mknod /dev/nvidia-modeset (195, 254)
+       ├─► Vulkan Loader: LunarG Vulkan 1.4+ (libvulkan1 + vulkan-tools)
+       ├─► Vulkan ICD:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
+       └─► Chrome/Dawn:   --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
+                          --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
+                          --enable-dawn-features=allow_unsafe_apis,disable_adapter_blocklist
+                          --disable-dawn-features=disallow_unsafe_apis
 ```
 
 ---
