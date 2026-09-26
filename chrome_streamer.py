@@ -145,7 +145,11 @@ INDEX_HTML = """<!DOCTYPE html>
             ws.onmessage = (event) => {
                 if (typeof event.data === 'string') {
                     const msg = JSON.parse(event.data);
-                    if (msg.type === 'frame') {
+                    if (msg.type === 'error') {
+                        statusOverlay.style.opacity = '1';
+                        statusOverlay.style.background = 'rgba(180, 20, 20, 0.9)';
+                        statusOverlay.textContent = '❌ ' + msg.message;
+                    } else if (msg.type === 'frame') {
                         const img = new Image();
                         img.onload = () => {
                             if (canvas.width !== img.width || canvas.height !== img.height) {
@@ -154,6 +158,7 @@ INDEX_HTML = """<!DOCTYPE html>
                             }
                             ctx.drawImage(img, 0, 0);
                             frameCount++;
+                            statusOverlay.style.opacity = '0';
                         };
                         img.src = 'data:image/jpeg;base64,' + msg.data;
                         if (msg.currentUrl && document.activeElement !== urlInput) {
@@ -167,6 +172,7 @@ INDEX_HTML = """<!DOCTYPE html>
 
             ws.onclose = () => {
                 statusOverlay.style.opacity = '1';
+                statusOverlay.style.background = 'rgba(13, 17, 23, 0.9)';
                 statusOverlay.textContent = '🔴 Disconnected. Reconnecting...';
                 setTimeout(connect, 1500);
             };
@@ -271,9 +277,14 @@ async def get_cdp_target():
                     for t in tabs:
                         if t.get('type') == 'page' and 'webSocketDebuggerUrl' in t:
                             return t['webSocketDebuggerUrl']
+                # If no active tab found, open a new one
+                async with s.put(f'http://127.0.0.1:{port}/json/new', timeout=2) as resp:
+                    new_tab = await resp.json()
+                    if 'webSocketDebuggerUrl' in new_tab:
+                        return new_tab['webSocketDebuggerUrl']
             except Exception:
                 await asyncio.sleep(0.5)
-    raise RuntimeError('Could not find active Chrome tab.')
+    raise RuntimeError('Could not find or create active Chrome tab.')
 
 async def index(request):
     return web.Response(text=INDEX_HTML, content_type='text/html')
@@ -303,8 +314,16 @@ async def websocket_handler(request):
                     'everyNthFrame': 1
                 }
             })
+            # Trigger paint so initial frame is emitted immediately
+            await cdp_ws.send_json({
+                'id': 3,
+                'method': 'Runtime.evaluate',
+                'params': {'expression': 'window.dispatchEvent(new Event("resize"))'}
+            })
 
+            ack_id = 100
             async def cdp_to_client():
+                nonlocal ack_id
                 try:
                     async for msg in cdp_ws:
                         if msg.type == web.WSMsgType.TEXT:
@@ -316,13 +335,14 @@ async def websocket_handler(request):
                                     'data': p['data'],
                                     'currentUrl': p.get('metadata', {}).get('url', '')
                                 }))
+                                ack_id += 1
                                 await cdp_ws.send_json({
-                                    'id': 3,
+                                    'id': ack_id,
                                     'method': 'Page.screencastFrameAck',
                                     'params': {'sessionId': p['sessionId']}
                                 })
-                except Exception:
-                    pass
+                except Exception as e:
+                    print(f"cdp_to_client error: {e}")
 
             async def client_to_cdp():
                 try:
