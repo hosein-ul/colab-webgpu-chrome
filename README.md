@@ -1,6 +1,6 @@
-# ⚡ Universal Hardware-Accelerated WebGPU Google Chrome on Google Colab (Tesla T4)
+# ⚡ Ultra-Low-Latency Hardware-Accelerated Chrome on Google Colab (Tesla T4)
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/modern-webrtc-stream/colab_chrome_stream.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![WebGPU](https://img.shields.io/badge/WebGPU-Hardware%20Accelerated-green.svg)]()
 [![NVIDIA T4](https://img.shields.io/badge/GPU-Tesla%20T4%20(15GB)-76B900.svg)]()
@@ -10,110 +10,47 @@
 
 ---
 
-## 📌 Direct Links
+## 📌 Direct Launch Link
 
-* **Open Notebook in Google Colab:** [Launch on Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)
-* **GitHub Repository:** [hosein-ul/colab-webgpu-chrome](https://github.com/hosein-ul/colab-webgpu-chrome)
+* **Open Modern Stream Notebook:** [Launch `colab_chrome_stream.ipynb` on Google Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/modern-webrtc-stream/colab_chrome_stream.ipynb)
+* **Branch:** `modern-webrtc-stream`
 * **Google Remote Desktop Setup (Method 2):** [remotedesktop.google.com/headless](https://remotedesktop.google.com/headless)
 * **Google Remote Desktop Access Panel:** [remotedesktop.google.com/access](https://remotedesktop.google.com/access)
 
 ---
 
-## 📖 Overview
+## 🚀 Key Improvements in this Architecture (Zero-VNC & Zero-Desktop)
 
-Google Colab provides free access to high-performance **NVIDIA Tesla T4 GPUs (15,360 MiB VRAM)**, but default Colab containers restrict direct GPU rendering nodes and lack desktop Vulkan manifests. Standard headless browsers cannot handle interactive Web3 tasks that require browser wallet authorization (e.g., OKX Wallet, MetaMask, Phantom) or intensive WebGPU compute shaders.
+Traditional VNC-based solutions suffer from high latency, heavy CPU load, frame drops, and cluttered Linux desktop environments (XFCE/GNOME taskbars). This modern branch completely reimagines remote browser streaming for Google Colab:
 
-This repository provides a universal, production-grade cloud solution:
-1. **Unlocks Full Hardware WebGPU:** Binds kernel DRM nodes (`/dev/dri/card0`, `/dev/dri/renderD128`, `/dev/nvidia-modeset`) and installs official NVIDIA Vulkan ICD manifests mapped to `libGLX_nvidia.so.0`.
-2. **Universal Web3 & Graphics Workloads:** Built for any high-compute task — WebGPU compute shaders (Keccak-256, Argon2, Blake3), WebGL 3D rendering, browser extensions (OKX, MetaMask), AI model inference in browser, and interactive graphics.
-3. **Real-Time Step-by-Step Logging:** Displays live progress timers, command stdout, and validation checks directly in Colab output instead of hanging silently.
-4. **Two Modern Remote Streaming Engines:**
-   * **Method 1 (KasmVNC 1.5.0):** 100% 1-Click web-native streaming with lossy **WebP compression**, client-side cursor rendering (zero mouse lag), and dynamic framerates up to 60 FPS — zero setup, zero accounts, no token copying!
-   * **Method 2 (Google Chrome Remote Desktop):** Ultra-fast 60 FPS WebRTC streaming over Google's internal datacenter backbone with sub-30ms latency.
+1. **No Desktop Clutter (Pure Chrome Window):** You stream and interact directly with the Google Chrome browser window itself. No Linux desktop, no panels, no window managers taking up resources.
+2. **100% Hardware Acceleration (NVIDIA Tesla T4):** Binds Linux kernel DRM nodes (`/dev/dri/card0`, `/dev/dri/renderD128`) and official NVIDIA Vulkan ICD manifests (`libGLX_nvidia.so.0`), unlocking WebGPU, WebGL, ANGLE, and GPU compute shaders.
+3. **Sub-50ms Input Latency:** Native mouse (clicks, moves, scrolling wheel, right-click) and keyboard events mapped directly into Chrome.
+4. **Two Modern Streaming Modes:**
+   - **Method 1: Chrome Ultra-Stream (CDP Screencast + WebSockets):** 1-click launch in under 20 seconds. 100% firewall-proof, running over secure Cloudflare Tunnels with custom dark-mode web player.
+   - **Method 2: Chrome Remote WebRTC (60 FPS):** WebRTC hardware-accelerated video streaming over Google's global STUN/TURN backbone with sub-30ms latency.
+5. **Live Verification & Diagnostics:** Built-in verification cell checking WebGPU JavaScript API status, ANGLE Vulkan backend, VRAM allocation, and live `nvidia-smi` power and compute load.
 
 ---
 
 ## ⚡ Comparison of Streaming Engines
 
-| Feature | Method 1: Modern KasmVNC 1.5.0 | Method 2: Google Chrome Remote Desktop |
+| Feature | Method 1: Chrome Ultra-Stream (CDP WebSocket) | Method 2: Chrome Remote WebRTC |
 | :--- | :---: | :---: |
-| **Setup Complexity** | **1-Click (Play button only)** | 1-Click with Google Auth code |
-| **Account Required?** | **None (Zero registration)** | Google Account |
-| **Compression Engine** | **Dynamic WebP (up to 80% lighter)** | **Hardware VP8/VP9 Video** |
-| **Frame Rate** | Up to 60 FPS (Adaptive) | **60 FPS Constant** |
-| **Latency** | 40–80ms (Ultra-Low) | **Sub-30ms (Feels like local PC)** |
-| **Cursor Response** | **Client-Side Rendered (0ms input lag)** | **Zero Input Lag (Client-rendered)** |
-| **Clipboard** | Bidirectional Web Clipboard | **Native OS Clipboard (`Ctrl+C / Ctrl+V`)** |
-| **Best For** | Instant 1-click launch, mobile, laptops | Extended sessions, maximum framerate |
+| **Stream Type** | Real-time GPU compositor frame streaming via WebSocket | 60 FPS H.264/VP8 WebRTC hardware video |
+| **Desktop Environment** | ❌ **None** (Pure Chrome window only) | ❌ **None** (Full-screen Chrome window only) |
+| **Network Protocol** | TCP / WebSocket (100% NAT & Firewall Proof) | WebRTC UDP/TCP with Google STUN/TURN |
+| **Latency** | 40–70ms (Ultra-responsive) | **Sub-30ms (Feels like local PC)** |
+| **Setup Speed** | ⚡ **1-Click, ~20 seconds (Zero registration)** | 1-Click with Google headless auth code |
+| **Hardware WebGPU** | **Active (NVIDIA Tesla T4)** | **Active (NVIDIA Tesla T4)** |
+| **Input Support** | Full Mouse (Move/Click/Wheel/Right-click) + Keyboard | Native OS Mouse + Keyboard + Clipboard |
 
 ---
 
-## 🟢 Method 1: 1-Click Modern KasmVNC Stream (WebP)
+## 🛠️ How to Run
 
-Recommended when you want the fastest, zero-friction launch without visiting external sites:
-
-1. Click the **[Open In Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/main/colab_chrome_webgpu.ipynb)** badge.
-2. In Colab, verify GPU runtime: `Runtime` ➔ `Change runtime type` ➔ **T4 GPU** ➔ `Save`.
-3. Set your desired `TARGET_URL` (or leave default `https://google.com`).
-4. Click the **Play button** on the first cell:  
-   `🟢 [روش اول] راه‌اندازی ۱۰۰٪ تک‌کلیک با KasmVNC مدرن (Live Real-Time Logs)`.
-5. Watch the real-time step timer (steps 1 to 6 complete in ~45 seconds).
-6. A green button titled **"👉 ورود به مرورگر ابری (KasmVNC)"** appears. Click it to open your desktop directly in your browser!
-
----
-
-## ⚡ Method 2: Google Chrome Remote Desktop (60 FPS WebRTC)
-
-Recommended when you want crystal-clear 60 FPS video streaming with sub-30ms latency:
-
-1. Open **[remotedesktop.google.com/headless](https://remotedesktop.google.com/headless)** in a new tab.
-2. Click **Begin** ➔ **Next** ➔ **Authorize**, then copy the **Debian Linux** command (starts with `DISPLAY= /opt/google/chrome-remote-desktop/start-host ...`).
-3. In Colab, paste the command into `AUTH_COMMAND` in the second cell:  
-   `⚡ [روش دوم] راه‌اندازی با Google Chrome Remote Desktop (Live Real-Time Logs)`.
-4. Enter your 6-digit PIN (default `123456`), set `TARGET_URL`, and click **Play**.
-5. Once initialized, click the blue button or visit **[remotedesktop.google.com/access](https://remotedesktop.google.com/access)**.
-6. Click **colab-t4**, enter your PIN, and enjoy fluid 60 FPS desktop streaming!
-
----
-
-## 🌐 High-Performance Web3 & Compute Workloads
-
-This platform is completely agnostic and supports any decentralized compute task:
-
-1. **Custom Target URL:** Set the `TARGET_URL` parameter in Colab before running, or navigate manually inside Chrome to any dApp.
-2. **Install Any Wallet Extension:** Google Chrome has full WebStore access — install MetaMask, OKX Wallet, Phantom, Coinbase Wallet, etc., with one click.
-3. **Heavy GPU/CPU Compute Tasks:**
-   * **Compute Shaders:** Parallel WebGPU computing (e.g., Keccak-256, Argon2, matrix multiplication).
-   * **Generative Graphics:** Heavy procedural WebGL/WebGPU generative art algorithms.
-   * **AI In-Browser Inference:** WebGPU-accelerated models (ONNX Runtime Web, Transformers.js, WebLLM).
-4. **Hardware Diagnostics:** Run the dedicated **GPU Diagnostics** cell to inspect live GPU compute utilization (%), VRAM, and temperature.
-
----
-
-## 🛠️ Linux Kernel & Vulkan Architecture
-
-Colab Docker runtimes do not expose DRM device nodes to userland browsers. This script automatically handles:
-
-```
-[Google Colab Container]
-       │
-       ├─► DRM Nodes: mknod /dev/dri/card0 (226, 0) + /dev/dri/renderD128 (226, 128)
-       ├─► ModeSet:   mknod /dev/nvidia-modeset (195, 254)
-       ├─► Vulkan:    /etc/vulkan/icd.d/nvidia_icd.json ──► libGLX_nvidia.so.0
-       └─► Chrome:    --enable-features=Vulkan,DefaultANGLEVulkan,VulkanFromANGLE,WebGPUService
-                      --use-vulkan=native --use-angle=vulkan --enable-unsafe-webgpu
-```
-
----
-
-## 📊 Verified Hardware Benchmarks
-
-* **GPU:** NVIDIA Tesla T4 (Turing TU104, 15,360 MiB VRAM)
-* **WebGPU Adapter:** `vendor: "nvidia"`, `architecture: "turing"`, `isFallbackAdapter: false`
-* **Process Type in nvidia-smi:** Dedicated `C+G` (Compute + Graphics) Chrome GPU process
-* **Shader Compute Throughput:** Full hardware utilization via native Vulkan ICD backend
-
----
-
-## 📜 License
-MIT License.
+1. Open the notebook: [Launch on Google Colab](https://colab.research.google.com/github/hosein-ul/colab-webgpu-chrome/blob/modern-webrtc-stream/colab_chrome_stream.ipynb).
+2. Set hardware accelerator to **T4 GPU** (`Runtime ➔ Change runtime type ➔ T4 GPU ➔ Save`).
+3. Run **Method 1 (Chrome Ultra-Stream)** or **Method 2 (Chrome Remote WebRTC)**.
+4. Run the **Verification Cell** to confirm that WebGPU and GPU acceleration are 100% active on the Tesla T4.
+5. Run the **Live GPU Monitor** to watch real-time GPU load, VRAM, and power draw.
