@@ -314,12 +314,8 @@ async def websocket_handler(request):
                     'everyNthFrame': 1
                 }
             })
-            # Trigger paint so initial frame is emitted immediately
-            await cdp_ws.send_json({
-                'id': 3,
-                'method': 'Runtime.evaluate',
-                'params': {'expression': 'window.dispatchEvent(new Event("resize"))'}
-            })
+            # Trigger immediate paint and frame generation
+            await cdp_ws.send_json({'id': 3, 'method': 'Page.reload'})
 
             ack_id = 100
             async def cdp_to_client():
