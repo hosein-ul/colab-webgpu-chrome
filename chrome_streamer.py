@@ -314,8 +314,15 @@ async def websocket_handler(request):
                     'everyNthFrame': 1
                 }
             })
-            # Trigger immediate paint and frame generation
-            await cdp_ws.send_json({'id': 3, 'method': 'Page.reload'})
+            # Trigger immediate screenshot so frame 1 appears instantly without waiting for page event
+            await cdp_ws.send_json({
+                'id': 50,
+                'method': 'Page.captureScreenshot',
+                'params': {
+                    'format': 'jpeg',
+                    'quality': CONFIG['quality']
+                }
+            })
 
             ack_id = 100
             async def cdp_to_client():
@@ -324,7 +331,13 @@ async def websocket_handler(request):
                     async for msg in cdp_ws:
                         if msg.type == web.WSMsgType.TEXT:
                             data = json.loads(msg.data)
-                            if data.get('method') == 'Page.screencastFrame':
+                            if data.get('id') == 50 and 'result' in data:
+                                await ws_client.send_str(json.dumps({
+                                    'type': 'frame',
+                                    'data': data['result']['data'],
+                                    'currentUrl': ''
+                                }))
+                            elif data.get('method') == 'Page.screencastFrame':
                                 p = data['params']
                                 await ws_client.send_str(json.dumps({
                                     'type': 'frame',
@@ -339,6 +352,18 @@ async def websocket_handler(request):
                                 })
                 except Exception as e:
                     print(f"cdp_to_client error: {e}")
+
+            async def keepalive():
+                while not ws_client.closed:
+                    await asyncio.sleep(2)
+                    try:
+                        await cdp_ws.send_json({
+                            'id': 50,
+                            'method': 'Page.captureScreenshot',
+                            'params': {'format': 'jpeg', 'quality': CONFIG['quality']}
+                        })
+                    except Exception:
+                        break
 
             async def client_to_cdp():
                 try:
@@ -395,7 +420,7 @@ async def websocket_handler(request):
                 except Exception:
                     pass
 
-            await asyncio.gather(cdp_to_client(), client_to_cdp())
+            await asyncio.gather(cdp_to_client(), client_to_cdp(), keepalive())
     return ws_client
 
 def main():
